@@ -25,6 +25,15 @@ slidev-mcp is an intelligent slide generation tool based on [Slidev](https://git
 
 ## 🚀 Quick Start
 
+### Installing via Smithery
+
+To install slidev-mcp for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@STUzhy/slidev-mcp):
+
+```bash
+npx -y @smithery/cli install @STUzhy/slidev-mcp --client claude
+```
+
+### Installing Manually
 1. **Install Python, UV and NodeJS**
 
 
