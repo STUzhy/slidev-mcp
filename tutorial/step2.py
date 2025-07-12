@@ -7,7 +7,7 @@ import os
 from crawl4ai import AsyncWebCrawler
 import datetime
 
-mcp = FastMCP('slidev-mcps-step1', version="0.0.1")
+mcp = FastMCP('slidev-mcps-step2', version="0.0.1")
 
 # 全局变量存储当前活动的Slidev项目
 ACTIVE_SLIDEV_PROJECT: Optional[Dict] = None
@@ -100,6 +100,26 @@ def save_slidev_content() -> bool:
     
     return True
 
+@mcp.prompt(
+    description='guide the ai to use slidev'
+)
+def guide_prompt():
+    return """
+你是一个擅长使用 slidev 进行讲演生成的 agent，当你生成 ppt 时，需要询问用户来获取封面图，后续使用 make_cover 就需要通过用户设置的封面图来。
+
+如果遇到大纲中的超链接存在图片的，你应该使用下面这样的范式来进行渲染。
+
+---
+layout: two-cols
+transition: slide-left
+---
+
+{正文内容}
+
+::right::
+
+![]({图片链接})
+"""
 
 @mcp.tool(
     description='check if nodejs and slidev-cli is ready'

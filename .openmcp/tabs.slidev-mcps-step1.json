@@ -1,0 +1,651 @@
+{
+  "clientId": "c89bbe5a-be5a-5bbe5af6f72-8bbe5af6f728b8f-28b8ff8f",
+  "currentIndex": 0,
+  "tabs": [
+    {
+      "name": "交互测试",
+      "icon": "icon-robot",
+      "type": "blank",
+      "componentIndex": 3,
+      "storage": {
+        "activeNames": [
+          0
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": "请帮我将下面的大纲制作成 slidev ppt \n \n  # 讲演提纲：从大模型的幻觉现象剖析开发 AI Agent 的技术瓶颈和解决思路\n\n## 封面页\n- **标题**：从大模型的幻觉现象剖析开发 AI Agent 的技术瓶颈和解决思路｜到底谁的幻觉更大？\n- **作者**：锦恢 (LSTM-Kirigaya)\n- **背景图**：使用文章中的首张配图（[链接](https://linux.do/uploads/default/original/4X/4/c/3/4c34eab8281f0d6215f2ea4139df019dcfc7212d.webp)）\n- **副标题**：探讨 AI Agent 开发中的核心挑战与解决之道\n\n---\n\n## 1. 前言\n- **讲演者背景**：\n  - Blender MCP 开发者\n  - OpenMCP 项目作者\n- **核心问题**：\n  - AI 领域 Demo 多但实用产品少\n  - 两大关键问题：\n    1. 大模型的幻觉\n    2. 开发者的幻觉\n\n---\n\n## 2. 大模型的幻觉\n### 定义\n- 大模型不知道自己不知道什么，遇到未知问题时会胡编乱造。\n- 核心表现：\n  - 盲目假设（如数据库查询案例）\n  - 虚构答案\n\n### 案例展示\n- **问题场景**：开发数据库查询 MCP 工具\n- **现象**：\n  - AI 回复“我不知道”，但工具实际支持查询\n  - 错误调用过程：\n    - 直接使用 `Comment` 类型查询\n    - 未先确认“评论对应的节点类型”\n- **配图**：\n  - [错误回复截图](https://linux.do/uploads/default/original/4X/2/0/1/2019c1c00096d36d9c6c5a2d229e78726e9009df.png)\n  - [错误调用过程截图](https://linux.do/uploads/default/original/4X/2/4/b/24baa4fb174e2dea422a59850bd420b57ca44fdc.png)\n\n---\n\n## 3. 解决大模型幻觉的方法\n### 前提条件\n- 明确 **应用场景** 和 **设计边界**：\n  - AI Agent 能做什么？不能做什么？\n\n### 具体方法\n1. **系统提示词**：\n   - 明确告知 AI 能力边界\n   - 提供清晰的指令模板\n2. **MCP 工具原子化拓展**：\n   - 细化查询能力（如先查询“评论节点类型”）\n\n### 效果展示\n- **优化后结果**：\n  - AI 正确识别节点类型\n  - 返回结构化数据\n- **配图**：\n  - [优化结果截图](https://linux.do/uploads/default/original/4X/2/4/7/247aa5b0ff8adc857f1f3a57cb4351989a6b5954.jpeg)\n\n---\n\n## 4. 开发者的幻觉\n### 核心问题\n- 开发者对大模型能力边界的不切实际期望\n- **现实背景**：\n  - Pretrain Scaling Law 已接近极限\n  - 大模型能力边界逐渐清晰\n\n### 具体表现\n- 在不适合的领域强行开发 AI Agent\n- 失败后归咎于“大模型太垃圾”\n- 忽视设计边界和方法论\n\n### 警示\n- 开发者需：\n  1. 学习 AI 底层技术\n  2. 理性认识大模型局限\n  3. 避免“饭圈化”思维\n\n---\n\n## 5. 结论与 OpenMCP 介绍\n### 核心总结\n1. 大模型幻觉：不知道自己不知道什么\n2. 开发者幻觉：对能力边界的不切实际期望\n3. 两者均为 AI Agent 开发的核心障碍\n\n### OpenMCP 项目\n- **定位**：一体化 MCP 开发与部署解决方案\n- **资源**：\n  - [官方站点](https://kirigaya.cn/openmcp)\n  - [GitHub](https://github.com/LSTM-Kirigaya/openmcp-client)\n- **呼吁**：\n  - “AI 时代不要抛弃自己的大脑”\n\n---\n\n## 附录（可选）\n- **参考文献**：\n  - 文中提到的 OpenMCP 教程链接\n  - 相关技术术语解释（如 Pretrain Scaling Law）\n- **Q&A 环节**：预留观众提问时间 \n \n",
+            "extraInfo": {
+              "created": 1752246154023,
+              "state": "success",
+              "serverName": "deepseek",
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+              {
+                "id": "call_0_2855eb1a-8ee0-4792-9e3d-fab7782e7bd9",
+                "index": 0,
+                "type": "function",
+                "function": {
+                  "name": "check_environment",
+                  "arguments": "{}"
+                }
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246159988,
+              "state": "success",
+              "serverName": "deepseek",
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 0,
+            "tool_call_id": "call_0_2855eb1a-8ee0-4792-9e3d-fab7782e7bd9",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "环境就绪，slidev 可以使用"
+              },
+              {
+                "type": "text",
+                "text": "52.0.0\n"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246160706,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 2064,
+                "completion_tokens": 15,
+                "total_tokens": 2079,
+                "prompt_tokens_details": {
+                  "cached_tokens": 64
+                },
+                "prompt_cache_hit_tokens": 64,
+                "prompt_cache_miss_tokens": 2000
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+              {
+                "id": "call_0_c9ba2d17-0d43-4ec7-8c1b-18773bb36ce0",
+                "index": 0,
+                "type": "function",
+                "function": {
+                  "name": "create_slidev",
+                  "arguments": "{\"path\":\"从大模型的幻觉现象剖析开发_AI_Agent_的技术瓶颈和解决思路\",\"title\":\"从大模型的幻觉现象剖析开发 AI Agent 的技术瓶颈和解决思路｜到底谁的幻觉更大？\",\"author\":\"锦恢 (LSTM-Kirigaya)\"}"
+                }
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246168196,
+              "state": "success",
+              "serverName": "deepseek",
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 0,
+            "tool_call_id": "call_0_c9ba2d17-0d43-4ec7-8c1b-18773bb36ce0",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "successfully load slidev project 从大模型的幻觉现象剖析开发_AI_Agent_的技术瓶颈和解决思路"
+              },
+              {
+                "type": "text",
+                "text": "从大模型的幻觉现象剖析开发_AI_Agent_的技术瓶颈和解决思路"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246168630,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 2125,
+                "completion_tokens": 73,
+                "total_tokens": 2198,
+                "prompt_tokens_details": {
+                  "cached_tokens": 2048
+                },
+                "prompt_cache_hit_tokens": 2048,
+                "prompt_cache_miss_tokens": 77
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+              {
+                "id": "call_0_6fc59f4b-74c4-44d3-8f8c-e1a64b618697",
+                "index": 0,
+                "type": "function",
+                "function": {
+                  "name": "make_cover",
+                  "arguments": "{\"title\":\"从大模型的幻觉现象剖析开发 AI Agent 的技术瓶颈和解决思路｜到底谁的幻觉更大？\",\"subtitle\":\"探讨 AI Agent 开发中的核心挑战与解决之道\",\"author\":\"锦恢 (LSTM-Kirigaya)\",\"background\":\"https://linux.do/uploads/default/original/4X/4/c/3/4c34eab8281f0d6215f2ea4139df019dcfc7212d.webp\",\"python_string_template\":\"<div class=\\\"slidev-layout\\\">\\n  <div class=\\\"header\\\">\\n    <h1 class=\\\"text-4xl font-bold text-primary\\\">{title}</h1>\\n    <h2 class=\\\"text-2xl text-secondary\\\">{subtitle}</h2>\\n  </div>\\n\\n  <div class=\\\"content\\\">\\n    <slot />\\n  </div>\\n\\n  <div class=\\\"footer\\\">\\n    <p class=\\\"text-sm text-gray-500\\\">Presented by {author} | {date}</p>\\n  </div>\\n</div>\"}"
+                }
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246184068,
+              "state": "success",
+              "serverName": "deepseek",
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 0,
+            "tool_call_id": "call_0_6fc59f4b-74c4-44d3-8f8c-e1a64b618697",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "Cover page updated"
+              },
+              {
+                "type": "text",
+                "text": "0"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246184087,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 2271,
+                "completion_tokens": 255,
+                "total_tokens": 2526,
+                "prompt_tokens_details": {
+                  "cached_tokens": 2176
+                },
+                "prompt_cache_hit_tokens": 2176,
+                "prompt_cache_miss_tokens": 95
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+              {
+                "id": "call_0_fb2b2482-b266-41ad-a176-12a997c3db0f",
+                "index": 0,
+                "type": "function",
+                "function": {
+                  "name": "add_page",
+                  "arguments": "{\"content\":\"## 1. 前言\\n\\n- **讲演者背景**：\\n  - Blender MCP 开发者\\n  - OpenMCP 项目作者\\n- **核心问题**：\\n  - AI 领域 Demo 多但实用产品少\\n  - 两大关键问题：\\n    1. 大模型的幻觉\\n    2. 开发者的幻觉\",\"layout\":\"default\"}"
+                }
+              },
+              {
+                "id": "call_1_08b1894d-d2a7-4ab7-80aa-4edb1a349f46",
+                "index": 1,
+                "type": "function",
+                "function": {
+                  "name": "add_page",
+                  "arguments": "{\"content\":\"## 2. 大模型的幻觉\\n\\n### 定义\\n- 大模型不知道自己不知道什么，遇到未知问题时会胡编乱造。\\n- 核心表现：\\n  - 盲目假设（如数据库查询案例）\\n  - 虚构答案\\n\\n### 案例展示\\n- **问题场景**：开发数据库查询 MCP 工具\\n- **现象**：\\n  - AI 回复“我不知道”，但工具实际支持查询\\n  - 错误调用过程：\\n    - 直接使用 `Comment` 类型查询\\n    - 未先确认“评论对应的节点类型”\\n- **配图**：\\n  - [错误回复截图](https://linux.do/uploads/default/original/4X/2/0/1/2019c1c00096d36d9c6c5a2d229e78726e9009df.png)\\n  - [错误调用过程截图](https://linux.do/uploads/default/original/4X/2/4/b/24baa4fb174e2dea422a59850bd420b57ca44fdc.png)\",\"layout\":\"default\"}"
+                }
+              },
+              {
+                "id": "call_2_84e9b4f7-110d-4069-8878-18d3ad5d5e77",
+                "index": 2,
+                "type": "function",
+                "function": {
+                  "name": "add_page",
+                  "arguments": "{\"content\":\"## 3. 解决大模型幻觉的方法\\n\\n### 前提条件\\n- 明确 **应用场景** 和 **设计边界**：\\n  - AI Agent 能做什么？不能做什么？\\n\\n### 具体方法\\n1. **系统提示词**：\\n   - 明确告知 AI 能力边界\\n   - 提供清晰的指令模板\\n2. **MCP 工具原子化拓展**：\\n   - 细化查询能力（如先查询“评论节点类型”）\\n\\n### 效果展示\\n- **优化后结果**：\\n  - AI 正确识别节点类型\\n  - 返回结构化数据\\n- **配图**：\\n  - [优化结果截图](https://linux.do/uploads/default/original/4X/2/4/7/247aa5b0ff8adc857f1f3a57cb4351989a6b5954.jpeg)\",\"layout\":\"default\"}"
+                }
+              },
+              {
+                "id": "call_3_3600b702-2b60-4ee8-8c4c-3d28971a7f0d",
+                "index": 3,
+                "type": "function",
+                "function": {
+                  "name": "add_page",
+                  "arguments": "{\"content\":\"## 4. 开发者的幻觉\\n\\n### 核心问题\\n- 开发者对大模型能力边界的不切实际期望\\n- **现实背景**：\\n  - Pretrain Scaling Law 已接近极限\\n  - 大模型能力边界逐渐清晰\\n\\n### 具体表现\\n- 在不适合的领域强行开发 AI Agent\\n- 失败后归咎于“大模型太垃圾”\\n- 忽视设计边界和方法论\\n\\n### 警示\\n- 开发者需：\\n  1. 学习 AI 底层技术\\n  2. 理性认识大模型局限\\n  3. 避免“饭圈化”思维\",\"layout\":\"default\"}"
+                }
+              },
+              {
+                "id": "call_4_e51971f4-830c-43e1-b50b-eb1c55808d14",
+                "index": 4,
+                "type": "function",
+                "function": {
+                  "name": "add_page",
+                  "arguments": "{\"content\":\"## 5. 结论与 OpenMCP 介绍\\n\\n### 核心总结\\n1. 大模型幻觉：不知道自己不知道什么\\n2. 开发者幻觉：对能力边界的不切实际期望\\n3. 两者均为 AI Agent 开发的核心障碍\\n\\n### OpenMCP 项目\\n- **定位**：一体化 MCP 开发与部署解决方案\\n- **资源**：\\n  - [官方站点](https://kirigaya.cn/openmcp)\\n  - [GitHub](https://github.com/LSTM-Kirigaya/openmcp-client)\\n- **呼吁**：\\n  - “AI 时代不要抛弃自己的大脑”\",\"layout\":\"default\"}"
+                }
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246231262,
+              "state": "success",
+              "serverName": "deepseek",
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 0,
+            "tool_call_id": "call_0_fb2b2482-b266-41ad-a176-12a997c3db0f",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "Page added at index 1"
+              },
+              {
+                "type": "text",
+                "text": "1"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246231290,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 2562,
+                "completion_tokens": 910,
+                "total_tokens": 3472,
+                "prompt_tokens_details": {
+                  "cached_tokens": 2496
+                },
+                "prompt_cache_hit_tokens": 2496,
+                "prompt_cache_miss_tokens": 66
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 1,
+            "tool_call_id": "call_1_08b1894d-d2a7-4ab7-80aa-4edb1a349f46",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "Page added at index 2"
+              },
+              {
+                "type": "text",
+                "text": "2"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246231300,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 2562,
+                "completion_tokens": 910,
+                "total_tokens": 3472,
+                "prompt_tokens_details": {
+                  "cached_tokens": 2496
+                },
+                "prompt_cache_hit_tokens": 2496,
+                "prompt_cache_miss_tokens": 66
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 2,
+            "tool_call_id": "call_2_84e9b4f7-110d-4069-8878-18d3ad5d5e77",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "Page added at index 3"
+              },
+              {
+                "type": "text",
+                "text": "3"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246231306,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 2562,
+                "completion_tokens": 910,
+                "total_tokens": 3472,
+                "prompt_tokens_details": {
+                  "cached_tokens": 2496
+                },
+                "prompt_cache_hit_tokens": 2496,
+                "prompt_cache_miss_tokens": 66
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 3,
+            "tool_call_id": "call_3_3600b702-2b60-4ee8-8c4c-3d28971a7f0d",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "Page added at index 4"
+              },
+              {
+                "type": "text",
+                "text": "4"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246231312,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 2562,
+                "completion_tokens": 910,
+                "total_tokens": 3472,
+                "prompt_tokens_details": {
+                  "cached_tokens": 2496
+                },
+                "prompt_cache_hit_tokens": 2496,
+                "prompt_cache_miss_tokens": 66
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 4,
+            "tool_call_id": "call_4_e51971f4-830c-43e1-b50b-eb1c55808d14",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "Page added at index 5"
+              },
+              {
+                "type": "text",
+                "text": "5"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246231319,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 2562,
+                "completion_tokens": 910,
+                "total_tokens": 3472,
+                "prompt_tokens_details": {
+                  "cached_tokens": 2496
+                },
+                "prompt_cache_hit_tokens": 2496,
+                "prompt_cache_miss_tokens": 66
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+              {
+                "id": "call_0_f04e22f4-994b-417d-a2fa-858db3520bba",
+                "index": 0,
+                "type": "function",
+                "function": {
+                  "name": "add_page",
+                  "arguments": "{\"content\":\"## 附录（可选）\\n\\n- **参考文献**：\\n  - 文中提到的 OpenMCP 教程链接\\n  - 相关技术术语解释（如 Pretrain Scaling Law）\\n- **Q&A 环节**：预留观众提问时间\",\"layout\":\"default\"}"
+                }
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246239279,
+              "state": "success",
+              "serverName": "deepseek",
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "tool",
+            "index": 0,
+            "tool_call_id": "call_0_f04e22f4-994b-417d-a2fa-858db3520bba",
+            "content": [
+              {
+                "type": "text",
+                "text": "true"
+              },
+              {
+                "type": "text",
+                "text": "Page added at index 6"
+              },
+              {
+                "type": "text",
+                "text": "6"
+              }
+            ],
+            "extraInfo": {
+              "created": 1752246239296,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 3659,
+                "completion_tokens": 77,
+                "total_tokens": 3736,
+                "prompt_tokens_details": {
+                  "cached_tokens": 3456
+                },
+                "prompt_cache_hit_tokens": 3456,
+                "prompt_cache_miss_tokens": 203
+              },
+              "enableXmlWrapper": false
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "您的 Slidev PPT 已经成功创建并填充了以下内容：\n\n1. **封面页**：\n   - 标题：从大模型的幻觉现象剖析开发 AI Agent 的技术瓶颈和解决思路｜到底谁的幻觉更大？\n   - 副标题：探讨 AI Agent 开发中的核心挑战与解决之道\n   - 作者：锦恢 (LSTM-Kirigaya)\n   - 背景图：[链接](https://linux.do/uploads/default/original/4X/4/c/3/4c34eab8281f0d6215f2ea4139df019dcfc7212d.webp)\n\n2. **前言**：\n   - 讲演者背景和核心问题。\n\n3. **大模型的幻觉**：\n   - 定义、案例展示及配图。\n\n4. **解决大模型幻觉的方法**：\n   - 前提条件、具体方法和效果展示。\n\n5. **开发者的幻觉**：\n   - 核心问题、具体表现和警示。\n\n6. **结论与 OpenMCP 介绍**：\n   - 核心总结和项目资源。\n\n7. **附录（可选）**：\n   - 参考文献和 Q&A 环节。\n\n您可以在项目路径 `从大模型的幻觉现象剖析开发_AI_Agent_的技术瓶颈和解决思路` 中查看和进一步编辑这些幻灯片。如果需要调整或添加更多内容，请随时告诉我！",
+            "extraInfo": {
+              "created": 1752246257195,
+              "state": "success",
+              "serverName": "deepseek",
+              "usage": {
+                "prompt_tokens": 3775,
+                "completion_tokens": 291,
+                "total_tokens": 4066,
+                "prompt_tokens_details": {
+                  "cached_tokens": 3712
+                },
+                "prompt_cache_hit_tokens": 3712,
+                "prompt_cache_miss_tokens": 63
+              },
+              "enableXmlWrapper": false
+            }
+          }
+        ],
+        "settings": {
+          "modelIndex": 0,
+          "enableTools": [
+            {
+              "name": "check_environment",
+              "description": "check if nodejs and slidev-cli is ready",
+              "inputSchema": {
+                "type": "object",
+                "properties": {}
+              },
+              "enabled": true
+            },
+            {
+              "name": "create_slidev",
+              "description": "create slidev, you need to ask user to get title and author to continue the task, you don't know title and author at beginning",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "author": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "path",
+                  "title",
+                  "author"
+                ]
+              },
+              "enabled": true
+            },
+            {
+              "name": "load_slidev",
+              "description": "load exist slidev project and get the current slidev markdown content",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "path"
+                ]
+              },
+              "enabled": true
+            },
+            {
+              "name": "make_cover",
+              "description": "Create or update slidev cover.\n`python_string_template` is python string template, you can use {title}, {subtitle}, {author}, {date} to format the string.\nhere is an example\n\n<div class=\"slidev-layout\">\n  <div class=\"header\">\n    <h1 class=\"text-4xl font-bold text-primary\">{title}</h1>\n    <h2 class=\"text-2xl text-secondary\">{subtitle}</h2>\n  </div>\n\n  <div class=\"content\">\n    <slot />\n  </div>\n\n  <div class=\"footer\">\n    <p class=\"text-sm text-gray-500\">Presented by {author} | {date}</p>\n  </div>\n</div>\n\nIf user give enough information, you can use it to update cover page, otherwise you must ask the lacking information. `background` must be a valid url of image",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "author": {
+                    "type": "string"
+                  },
+                  "background": {
+                    "type": "string"
+                  },
+                  "python_string_template": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title"
+                ]
+              },
+              "enabled": true
+            },
+            {
+              "name": "add_page",
+              "description": "Add new page.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  },
+                  "layout": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "content"
+                ]
+              },
+              "enabled": true
+            },
+            {
+              "name": "set_page",
+              "description": "\n`index`: the index of the page to set. 0 is cover, so you should use index in [1, {len(SLIDEV_CONTENT) - 1}]\n`content`: the markdown content to set.\n- You can use ```code ```, latex or mermaid to represent more complex idea or concept. \n- Too long or short content is forbidden.\n`layout`: the layout of the page.\n- If you don't know how to write slidev, you can query the example of the default theme here: https://raw.githubusercontent.com/slidevjs/themes/refs/heads/main/packages/theme-apple-basic/example.md\n- Remember to look up for this document at most once during the task. \n",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "integer"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "layout": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "index",
+                  "content"
+                ]
+              },
+              "enabled": true
+            },
+            {
+              "name": "get_page",
+              "description": "get the content of the `index` th page",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "index"
+                ]
+              },
+              "enabled": true
+            }
+          ],
+          "enableWebSearch": false,
+          "temperature": 0.6,
+          "contextLength": 100,
+          "systemPrompt": "",
+          "enableXmlWrapper": false,
+          "parallelToolCalls": true
+        }
+      }
+    }
+  ]
+}
