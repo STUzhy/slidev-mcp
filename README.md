@@ -55,6 +55,8 @@ slidev-mcp is an intelligent slide generation tool based on [Slidev](https://git
 2. Open vscode
 3. Open main.py and start OpenMCP
 
+For detailed installation instructions, please see [Install Guide](docs/install.md).
+
 ## 📄 License
 
 MIT License © 2023 [LSTM-Kirigaya](https://github.com/LSTM-Kirigaya)

@@ -56,6 +56,8 @@ slidev-mcp 是一个基于 [Slidev](https://github.com/slidevjs/slidev) 的智�
 2. 打开 VSCode 编辑器
 3. 运行 main.py 并启动 OpenMCP
 
+详细的安装说明，请查看[安装说明](docs/install.zh.md)。
+
 
 ## 📄 开源协议
 
