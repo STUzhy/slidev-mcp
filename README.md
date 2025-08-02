@@ -27,9 +27,9 @@ slidev-mcp is an intelligent slide generation tool based on [Slidev](https://git
 - Natural language interactive slide creation
 - Automated generation of professional presentations
 
-## 🛠️ Installation
+## 🚀 Quick Start
 
-For detailed installation instructions, please see [Installation Guide](docs/install.md).
+For detailed setup and usage instructions, please see [Quick Start Guide](docs/quickstart.md).
 
 ## 🔧 Available Tools
 
