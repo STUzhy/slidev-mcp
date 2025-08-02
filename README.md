@@ -27,6 +27,42 @@ slidev-mcp is an intelligent slide generation tool based on [Slidev](https://git
 
 For detailed installation instructions, please see [Installation Guide](docs/install.md).
 
+## 🔧 Available Tools
+
+The MCP server provides the following tools for slide creation and management:
+
+### Environment & Project Management
+
+| Tool | Input Parameters | Output | Purpose |
+|------|------------------|--------|---------|
+| `check_environment` | None | Environment status and version info | Verify dependencies are installed |
+| `create_slidev` | `path` (str), `title` (str), `author` (str) | Project creation status and path | Initialize new Slidev project |
+| `load_slidev` | `path` (str) | Project content and slide data | Load existing presentation |
+
+### Slide Content Management
+
+| Tool | Input Parameters | Output | Purpose |
+|------|------------------|--------|---------|
+| `make_cover` | `title` (str), `subtitle` (str, opt), `author` (str, opt), `background` (str, opt), `python_string_template` (str, opt) | Cover slide creation status | Create/update cover page |
+| `add_page` | `content` (str), `layout` (str, opt) | New slide index | Add new slide to presentation |
+| `set_page` | `index` (int), `content` (str), `layout` (str, opt) | Update status | Modify existing slide content |
+| `get_page` | `index` (int) | Slide content in markdown | Retrieve specific slide content |
+
+### Utility Tools
+
+| Tool | Input Parameters | Output | Purpose |
+|------|------------------|--------|---------|
+| `websearch` | `url` (str) | Extracted markdown text | Gather web content for slides |
+| `get_slidev_usage` | None | Slidev layout guide and templates | Provide layout documentation |
+| `start_slidev` | None | Command string for server | Launch presentation server |
+
+### AI Assistant
+
+| Tool | Input Parameters | Output | Purpose |
+|------|------------------|--------|---------|
+| `guide` | None | System prompt | Guide AI in effective tool usage |
+
+> **Note**: `opt` = optional parameter
 
 ## 📄 License
 
