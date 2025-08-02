@@ -23,39 +23,10 @@ slidev-mcp is an intelligent slide generation tool based on [Slidev](https://git
 - Natural language interactive slide creation
 - Automated generation of professional presentations
 
-## 🚀 Quick Start
+## 🛠️ Installation
 
-1. **Install Python, UV and NodeJS**
+For detailed installation instructions, please see [Installation Guide](docs/install.md).
 
-
-2. configure
-    ```json
-    {
-      "mcpServers": {
-        "slidev-mcp": {
-          "command": "/path/to/uv",
-          "args": [
-            "--directory",
-            "/path/to/slidev-mcp",
-            "run",
-            "main.py"
-          ],
-          "description": ""
-        }
-      }
-    }
-    ```
-
-3. Open Claude Desktop or other MCP client (such as OpenMCP, Cherry Studio)
-
-## 🛠️ Developement
-
-1. [**Download OpenMCP**](https://kirigaya.cn/openmcp/plugin-tutorial/quick-start/acquire-openmcp.html)
-
-2. Open vscode
-3. Open main.py and start OpenMCP
-
-For detailed installation instructions, please see [Install Guide](docs/install.md).
 
 ## 📄 License
 

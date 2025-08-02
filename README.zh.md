@@ -24,39 +24,11 @@ slidev-mcp 是一个基于 [Slidev](https://github.com/slidevjs/slidev) 的智�
 - 自然语言交互式创建幻灯片
 - 自动化生成专业级演示文稿
 
-## 🚀 快速开始
 
-1. **安装 Python、UV 和 NodeJS**
-
-
-2. 配置
-    ```json
-    {
-      "mcpServers": {
-        "slidev-mcp": {
-          "command": "/path/to/uv",
-          "args": [
-            "--directory",
-            "/path/to/slidev-mcp",
-            "run",
-            "main.py"
-          ],
-          "description": ""
-        }
-      }
-    }
-    ```
-
-3. 打开 Claude Desktop 或其他 MCP 客户端（如 OpenMCP、Cherry Studio）
-
-## 🛠️ 开发指南
-
-1. [**下载 OpenMCP**](https://kirigaya.cn/openmcp/plugin-tutorial/quick-start/acquire-openmcp.html)
-
-2. 打开 VSCode 编辑器
-3. 运行 main.py 并启动 OpenMCP
+## 🛠️ 安装说明
 
 详细的安装说明，请查看[安装说明](docs/install.zh.md)。
+
 
 
 ## 📄 开源协议
