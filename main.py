@@ -10,7 +10,7 @@ import asyncio
 from crawl4ai import AsyncWebCrawler
 import datetime
 
-mcp = FastMCP('slidev-mcp', version="0.0.1")
+mcp = FastMCP('slidev-mcp')
 
 # 全局变量存储当前活动的Slidev项目
 ACTIVE_SLIDEV_PROJECT: Optional[Dict] = None
