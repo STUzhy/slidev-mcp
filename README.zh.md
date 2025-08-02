@@ -7,6 +7,10 @@
   </h1>
   <p>让 AI 帮你轻松创建专业幻灯片演示！</p>
   
+  <p>
+    <a href="README.md">English</a> | <strong>中文</strong>
+  </p>
+  
   <div>
     <img src="https://img.shields.io/badge/Slidev-@latest-blue?logo=slidev" alt="Slidev"/>
     <img src="https://img.shields.io/badge/AI-大模型-orange?logo=openai" alt="AI"/>

@@ -6,6 +6,10 @@
   </h1>
   <p>AI-powered Professional Slide Creation Made Easy!</p>
   
+  <p>
+    <strong>English</strong> | <a href="README.zh.md">中文</a>
+  </p>
+  
   <div>
     <img src="https://img.shields.io/badge/Slidev-@latest-blue?logo=slidev" alt="Slidev"/>
     <img src="https://img.shields.io/badge/AI-Large%20Language%20Model-orange?logo=openai" alt="AI"/>
