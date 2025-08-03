@@ -58,7 +58,14 @@ source .venv/bin/activate
 uv sync  # 安装项目依赖
 ```
 
-### 4. 安装 Slidev CLI
+### 4. 安装 Playwright 浏览器
+
+```bash
+# 在虚拟环境中安装 Playwright 浏览器
+playwright install
+```
+
+### 5. 安装 Slidev CLI
 
 ```bash
 npm install -g @slidev/cli
@@ -167,7 +174,15 @@ uv run main.py
 
 ## 常见问题 (FAQ)
 
-### Q1: 为什么一直提示"Node.js 未安装"？
+### Q1: 提示 "Playwright 浏览器未安装" 或 "Executable doesn't exist" 错误？
+
+**解决方法**: 这通常是因为 Playwright 浏览器组件未正确安装导致的。请在激活虚拟环境后运行：
+
+```bash
+playwright install
+```
+
+### Q2: 为什么一直提示"Node.js 未安装"？
 
 **解决方法**: 这个问题通常发生在 MCP 客户端（如 CherryStudio、Claude Desktop 等）没有继承系统的 PATH 环境变量时。即使 Node.js 在命令行中可以正常使用，MCP 服务器进程也无法找到 Node.js，因为它没有访问系统 PATH 的权限。
 

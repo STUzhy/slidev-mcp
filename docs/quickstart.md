@@ -57,7 +57,14 @@ source .venv/bin/activate
 uv sync  # Install project dependencies
 ```
 
-### 4. Install Slidev CLI
+### 4. Install Playwright Browsers
+
+```bash
+# Install Playwright browsers in virtual environment
+playwright install
+```
+
+### 5. Install Slidev CLI
 
 ```bash
 npm install -g @slidev/cli
@@ -163,7 +170,15 @@ For more usage methods, please refer to the project's [README documentation](../
 
 ## Frequently Asked Questions (FAQ)
 
-### Q1: Why do I keep getting "Node.js not installed" error?
+### Q1: Getting "Playwright browsers not installed" or "Executable doesn't exist" error?
+
+**Solution**: This usually occurs when Playwright browser components are not properly installed. After activating your virtual environment, run:
+
+```bash
+playwright install
+```
+
+### Q2: Why do I keep getting "Node.js not installed" error?
 
 **Solution**: This issue typically occurs when MCP clients (like CherryStudio, Claude Desktop, etc.) don't inherit the system's PATH environment variables. Even though Node.js works fine in your command prompt/terminal, the MCP server process cannot find Node.js because it doesn't have access to the system PATH.
 
