@@ -27,7 +27,9 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 #### 3. Install Node.js (>=20.0)
 - Visit [Node.js Official Website](https://nodejs.org/) to download and install the LTS version
+- **Important**: During installation, ensure "Add to PATH" option is checked to add Node.js to system PATH environment variable
 - After installation, run `node --version` in command line to verify the installation
+- If the command is not recognized, you may need to manually add Node.js installation directory to your system PATH
 
 ## Install Project Dependencies
 
@@ -102,9 +104,19 @@ If you want to develop or debug, we recommend using [OpenMCP](https://marketplac
 
 1. Download the OpenMCP VSCode extension.
 2. Open the OpenMCP extension.
-3. Create a new MCP Server, select stdio, and enter the command `uv --directory E:\\node-project\\slidev-mcp run main.py`.
+3. Create a new MCP Server, select stdio, and configure as follows:
+   - **Command**: `uv --directory <replace-with-your-slidev-mcp-path> run main.py`
+   - **Environment Variables**: If you encounter Node.js not found issues, add environment variables:
+     ```json
+     {
+       "PATH": "<replace-with-your-nodejs-path>;${PATH}"
+     }
+     ```
 
-> **Note**: Please replace the path `E:\\node-project\\slidev-mcp` with your actual project path.
+> **Note**: 
+> - Replace `<replace-with-your-slidev-mcp-path>` with your actual project path, e.g., `E:\\node-project\\slidev-mcp`
+> - Replace `<replace-with-your-nodejs-path>` with your Node.js installation path, e.g., `C:\\Program Files\\nodejs`
+> - In some clients, you can use `${PATH}` to reference the system's PATH environment variable
 
 ### Production Usage
 
@@ -119,17 +131,24 @@ Add the following configuration to Claude Desktop's configuration file:
       "command": "uv",
       "args": [
         "--directory",
-        "E:\\node-project\\slidev-mcp",
+        "<replace-with-your-slidev-mcp-path>",
         "run",
         "main.py"
       ],
+      "env": {
+        "PATH": "<replace-with-your-nodejs-path>;${PATH}"
+      },
       "description": "AI-powered Slidev slide creation tool"
     }
   }
 }
 ```
 
-> **Note**: Please replace the path `E:\\node-project\\slidev-mcp` with your actual project path.
+> **Note**: 
+> - Replace `<replace-with-your-slidev-mcp-path>` with your actual project path, e.g., `E:\\node-project\\slidev-mcp`
+> - Replace `<replace-with-your-nodejs-path>` with your Node.js installation path, e.g., `C:\\Program Files\\nodejs`
+> - The `env` section is used to solve Node.js not found issues in MCP clients
+> - `${PATH}` references the system's current PATH environment variable
 
 ## Additional Features
 
@@ -141,3 +160,51 @@ After installation, you can:
 - Customize slide themes and layouts
 
 For more usage methods, please refer to the project's [README documentation](../README.md).
+
+## Frequently Asked Questions (FAQ)
+
+### Q1: Why do I keep getting "Node.js not installed" error?
+
+**Solution**: This issue typically occurs when MCP clients (like CherryStudio, Claude Desktop, etc.) don't inherit the system's PATH environment variables. Even though Node.js works fine in your command prompt/terminal, the MCP server process cannot find Node.js because it doesn't have access to the system PATH.
+
+#### For CherryStudio and similar MCP clients:
+When configuring the MCP server, you need to explicitly provide the PATH environment variable:
+
+1. **Find your Node.js installation path**:
+   - Windows: Usually `C:\Program Files\nodejs` or `C:\Program Files (x86)\nodejs`
+   - macOS: Usually `/usr/local/bin` or `/opt/homebrew/bin`
+   - Linux: Usually `/usr/bin` or `/usr/local/bin`
+
+2. **Configure MCP server with environment variables**:
+   In your MCP client configuration, add environment variables section:
+   ```json
+   {
+     "command": "uv",
+     "args": ["--directory", "<replace-with-your-slidev-mcp-path>", "run", "main.py"],
+     "env": {
+       "PATH": "<replace-with-your-nodejs-path>;${PATH}"
+     }
+   }
+   ```
+
+#### For Claude Desktop:
+Add the `env` section to your configuration:
+```json
+{
+  "mcpServers": {
+    "slidev-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "<replace-with-your-slidev-mcp-path>",
+        "run",
+        "main.py"
+      ],
+      "env": {
+        "PATH": "<replace-with-your-nodejs-path>;${PATH}"
+      },
+      "description": "AI-powered Slidev slide creation tool"
+    }
+  }
+}
+```
