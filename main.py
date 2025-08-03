@@ -32,7 +32,9 @@ def run_command(command: Union[str, List[str]]) -> SlidevResult:
             cwd='./',
             capture_output=True,
             text=True,
-            shell=isinstance(command, str)
+            shell=isinstance(command, str),
+            timeout=10,
+            stdin=subprocess.DEVNULL
         )
         if result.returncode == 0:
             return SlidevResult(True, "Command executed successfully", result.stdout)
