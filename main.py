@@ -363,4 +363,4 @@ def get_page(index: int) -> SlidevResult:
     return SlidevResult(True, f"Content of page {index}", SLIDEV_CONTENT[index])
 
 if __name__ == "__main__":
-    mcp.run(transport='stdio')
+    mcp.run(transport=['stdio','streamable-http'])
