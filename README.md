@@ -57,14 +57,7 @@ The MCP server provides the following tools for slide creation and management:
 | Tool | Input Parameters | Output | Purpose |
 |------|------------------|--------|---------|
 | `websearch` | `url` (str) | Extracted markdown text | Gather web content for slides |
-| `get_slidev_usage` | None | Slidev layout guide and templates | Provide layout documentation |
-| `start_slidev` | None | Command string for server | Launch presentation server |
 
-### AI Assistant
-
-| Tool | Input Parameters | Output | Purpose |
-|------|------------------|--------|---------|
-| `guide` | None | System prompt | Guide AI in effective tool usage |
 
 > **Note**: `opt` = optional parameter
 

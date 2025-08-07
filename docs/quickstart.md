@@ -223,3 +223,15 @@ Add the `env` section to your configuration:
   }
 }
 ```
+
+### Q3: Experiencing timeout or freezing issues with some tools on Windows?
+
+**Issue Description**: This is a known bug on Windows systems when using stdio transport mode. The issue manifests as:
+- Timeout or freezing occurs when called through MCP server in stdio mode
+- This issue only occurs on Windows systems
+
+**Temporary Solutions**:
+1. **Use HTTP Transport Mode**: If your MCP client supports HTTP connections, try using HTTP mode instead of stdio mode
+2. **Wait for Fix**: Developers are actively investigating the root cause of this issue and working on a solution
+3. **System Compatibility**: This issue does not occur on macOS and Linux systems
+
