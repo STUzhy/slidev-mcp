@@ -7,4 +7,5 @@ requires-python = ">=3.13"
 dependencies = [
     "crawl4ai>=0.7.0",
     "mcp[cli]>=1.9.4",
+    "usermcp>=0.1.2",
 ]

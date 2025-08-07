@@ -6,11 +6,13 @@ import shutil
 from pathlib import Path
 import os
 from utils import parse_markdown_slides
-import asyncio
 from crawl4ai import AsyncWebCrawler
 import datetime
+from usermcp import register_user_profile_mcp
 
 mcp = FastMCP('slidev-mcp-academic')
+
+register_user_profile_mcp(mcp)
 
 # 全局变量存储当前活动的Slidev项目
 ACTIVE_SLIDEV_PROJECT: Optional[Dict] = None
@@ -114,11 +116,9 @@ def transform_parameters_to_frontmatter(parameters: dict):
         frontmatter += f'{key}: {value}\n'
     return frontmatter.strip()
 
-@mcp.prompt(
-    name='guide',
-    description='guide the ai to use slidev'
-)
+@mcp.prompt()
 def guide_prompt():
+    """guide the ai to use slidev"""
     return """
 你是一个擅长使用 slidev 进行讲演生成的 agent，如果用户给你输入超链接，你需要调用 websearch 工具来获取对应的文本。对于返回的文本，如果你看到了验证码，网络异常等等代表访问失败的信息，你需要提醒用户本地网络访问受阻，请手动填入需要生成讲演的文本。
 当你生成讲演的每一页时，一定要严格按照用户输入的文本内容或者你通过 websearch 获取到的文本内容来。请记住，在获取用户输入之前，你一无所知，请不要自己编造不存在的事实，扭曲文章的原本含义，或者是不经过用户允许的情况下扩充本文的内容。
@@ -146,11 +146,9 @@ async def websearch(url: str) -> SlidevResult:
         return SlidevResult(True, "success", result.markdown)
 
 
-@mcp.tool(
-    name='check_environment',
-    description='check if nodejs and slidev-cli is ready'
-)
+@mcp.tool()
 def check_environment() -> SlidevResult:
+    """check if nodejs and slidev-cli is ready"""
     if not check_nodejs_installed():
         return SlidevResult(False, "Node.js is not installed. Please install Node.js first.")
     
@@ -160,14 +158,13 @@ def check_environment() -> SlidevResult:
     return SlidevResult(True, "环境就绪，slidev 可以使用", result.output)
 
 
-@mcp.tool(
-    name='create_slidev',
-    description="""create slidev, you need to ask user to get title and author to continue the task.
-you don\'t know title and author at beginning.
-`path`: folder path of the project
-""",
-)
+@mcp.tool()
 def create_slidev(path: str) -> SlidevResult:
+    """
+    create slidev, you need to ask user to get title and author to continue the task.
+    you don\'t know title and author at beginning.
+    `path`: folder path of the project
+    """
     global ACTIVE_SLIDEV_PROJECT, SLIDEV_CONTENT
 
     # clear global var
@@ -220,23 +217,21 @@ transition: slide-left
         return SlidevResult(False, f"unknown error: {str(e)}", path)
 
 
-@mcp.tool(
-    name='load_slidev',
-    description='load exist slidev project and get the current slidev markdown content',
-)
+@mcp.tool()
 def load_slidev(path: str) -> SlidevResult:
+    """load exist slidev project and get the current slidev markdown content"""
     if load_slidev_content(path):
         return SlidevResult(True, f"Slidev project loaded from {path}", SLIDEV_CONTENT)
     return SlidevResult(False, f"Failed to load Slidev project from {path}")
 
 
-@mcp.tool(
-    name='make_cover',
-    description="""Create or update slidev cover.
-`python_string_template` is python string template, you can use {title}, {subtitle} to format the string.
-If user give enough information, you can use it to update cover page, otherwise you must ask the lacking information. `background` must be a valid url of image""",
-)
+@mcp.tool()
 def make_cover(title: str, subtitle: str = "", author: str = "", background: str = "", python_string_template: str = "") -> SlidevResult:
+    """
+    Create or update slidev cover.
+    `python_string_template` is python string template, you can use {title}, {subtitle} to format the string.
+    If user give enough information, you can use it to update cover page, otherwise you must ask the lacking information. `background` must be a valid url of image
+    """
     global SLIDEV_CONTENT
     
     if not ACTIVE_SLIDEV_PROJECT:
@@ -277,15 +272,14 @@ background: {background}
     save_slidev_content()
     return SlidevResult(True, "Cover page updated", 0)
 
-@mcp.tool(
-    name='add_page',
-    description="""Add new page.
-- `content` is markdown format text to describe page content.
-- `layout`: layout of the page
-- `parameters`: frontmatter parameters of the page
-"""
-)
+@mcp.tool()
 def add_page(content: str, layout: str = "default", parameters: dict = {}) -> SlidevResult:
+    """
+    Add new page.
+    - `content` is markdown format text to describe page content.
+    - `layout`: layout of the page
+    - `parameters`: frontmatter parameters of the page
+    """
     global SLIDEV_CONTENT
     
     if not ACTIVE_SLIDEV_PROJECT:
@@ -311,18 +305,16 @@ def add_page(content: str, layout: str = "default", parameters: dict = {}) -> Sl
     return SlidevResult(True, f"Page added at index {page_index}", page_index)
 
 
-@mcp.tool(
-    name='set_page',
-    description="""
-`index`: the index of the page to set. 0 is cover, so you should use index in [1, {len(SLIDEV_CONTENT) - 1}]
-`content`: the markdown content to set.
-- You can use ```code ```, latex or mermaid to represent more complex idea or concept. 
-- Too long or short content is forbidden.
-`layout`: the layout of the page.
-`parameters`: frontmatter parameters.
-""",
-)
+@mcp.tool()
 def set_page(index: int, content: str, layout: str = "", parameters: dict = {}) -> SlidevResult:
+    """
+    `index`: the index of the page to set. 0 is cover, so you should use index in [1, {len(SLIDEV_CONTENT) - 1}]
+    `content`: the markdown content to set.
+    - You can use ```code ```, latex or mermaid to represent more complex idea or concept. 
+    - Too long or short content is forbidden.
+    `layout`: the layout of the page.
+    `parameters`: frontmatter parameters.
+    """
     global SLIDEV_CONTENT
     
     if not ACTIVE_SLIDEV_PROJECT:
@@ -349,11 +341,9 @@ def set_page(index: int, content: str, layout: str = "", parameters: dict = {}) 
     
     return SlidevResult(True, f"Page {index} updated", index)
 
-@mcp.tool(
-    name='get_page',
-    description='get the content of the `index` th page',
-)
+@mcp.tool()
 def get_page(index: int) -> SlidevResult:
+    """get the content of the `index` th page"""
     if not ACTIVE_SLIDEV_PROJECT:
         return SlidevResult(False, "No active Slidev project. Please create or load one first.")
     
@@ -361,6 +351,8 @@ def get_page(index: int) -> SlidevResult:
         return SlidevResult(False, f"Invalid page index: {index}")
     
     return SlidevResult(True, f"Content of page {index}", SLIDEV_CONTENT[index])
+
+
 
 if __name__ == "__main__":
     mcp.run(transport='stdio')
