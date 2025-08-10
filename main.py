@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
-from typing import Optional, Union, List, NamedTuple, Dict
+from typing import Optional, Union, List, Dict
+from pydantic import BaseModel
 import subprocess
 import sys
 import shutil
@@ -9,6 +10,7 @@ from utils import parse_markdown_slides
 from crawl4ai import AsyncWebCrawler
 import datetime
 from usermcp import register_user_profile_mcp
+import argparse
 
 mcp = FastMCP('slidev-mcp-academic')
 
@@ -19,7 +21,7 @@ ACTIVE_SLIDEV_PROJECT: Optional[Dict] = None
 SLIDEV_CONTENT: List[str] = []
 ACADEMIC_THEME = 'academic'
 
-class SlidevResult(NamedTuple):
+class SlidevResult(BaseModel):
     success: bool
     message: str
     output: Optional[Union[str, int, List[str]]] = None
@@ -39,11 +41,11 @@ def run_command(command: Union[str, List[str]]) -> SlidevResult:
             stdin=subprocess.DEVNULL
         )
         if result.returncode == 0:
-            return SlidevResult(True, "Command executed successfully", result.stdout)
+            return SlidevResult(success=True, message="Command executed successfully", output=result.stdout)
         else:
-            return SlidevResult(False, f"Command failed: {result.stderr}")
+            return SlidevResult(success=False, message=f"Command failed: {result.stderr}")
     except Exception as e:
-        return SlidevResult(False, f"Error executing command: {str(e)}")
+        return SlidevResult(success=False, message=f"Error executing command: {str(e)}")
 
 def parse_markdown_slides(content: str) -> list:
     """
@@ -143,19 +145,19 @@ https://raw.githubusercontent.com/alexanderdavide/slidev-theme-academic/refs/hea
 async def websearch(url: str) -> SlidevResult:
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url)
-        return SlidevResult(True, "success", result.markdown)
+        return SlidevResult(success=True, message="success", output=result.markdown)
 
 
 @mcp.tool()
 def check_environment() -> SlidevResult:
     """check if nodejs and slidev-cli is ready"""
     if not check_nodejs_installed():
-        return SlidevResult(False, "Node.js is not installed. Please install Node.js first.")
+        return SlidevResult(success=False, message="Node.js is not installed. Please install Node.js first.")
     
     result = run_command("slidev --version")
     if not result.success:
         return run_command("npm install -g @slidev/cli")
-    return SlidevResult(True, "环境就绪，slidev 可以使用", result.output)
+    return SlidevResult(success=True, message="环境就绪，slidev 可以使用", output=result.output)
 
 
 @mcp.tool()
@@ -186,7 +188,7 @@ def create_slidev(path: str) -> SlidevResult:
         # 如果已经存在 slides.md，则读入内容，初始化
         if os.path.exists(slides_path):
             load_slidev_content(path)
-            return SlidevResult(True, f"项目已经存在于 {path}/slides.md 中", SLIDEV_CONTENT)
+            return SlidevResult(success=True, message=f"项目已经存在于 {path}/slides.md 中", output=SLIDEV_CONTENT)
         else:
             SLIDEV_CONTENT = []
 
@@ -205,24 +207,24 @@ transition: slide-left
         
         # 尝试加载内容
         if not load_slidev_content(path):
-            return SlidevResult(False, "successfully create project but fail to load file", path)
+            return SlidevResult(success=False, message="successfully create project but fail to load file", output=path)
             
-        return SlidevResult(True, f"successfully load slidev project {path}", path)
+        return SlidevResult(success=True, message=f"successfully load slidev project {path}", output=path)
         
     except OSError as e:
-        return SlidevResult(False, f"fail to create file: {str(e)}", path)
+        return SlidevResult(success=False, message=f"fail to create file: {str(e)}", output=path)
     except IOError as e:
-        return SlidevResult(False, f"fail to create file: {str(e)}", path)
+        return SlidevResult(success=False, message=f"fail to create file: {str(e)}", output=path)
     except Exception as e:
-        return SlidevResult(False, f"unknown error: {str(e)}", path)
+        return SlidevResult(success=False, message=f"unknown error: {str(e)}", output=path)
 
 
 @mcp.tool()
 def load_slidev(path: str) -> SlidevResult:
     """load exist slidev project and get the current slidev markdown content"""
     if load_slidev_content(path):
-        return SlidevResult(True, f"Slidev project loaded from {path}", SLIDEV_CONTENT)
-    return SlidevResult(False, f"Failed to load Slidev project from {path}")
+        return SlidevResult(success=True, message=f"Slidev project loaded from {path}", output=SLIDEV_CONTENT)
+    return SlidevResult(success=False, message=f"Failed to load Slidev project from {path}")
 
 
 @mcp.tool()
@@ -235,7 +237,7 @@ def make_cover(title: str, subtitle: str = "", author: str = "", background: str
     global SLIDEV_CONTENT
     
     if not ACTIVE_SLIDEV_PROJECT:
-        return SlidevResult(False, "No active Slidev project. Please create or load one first.")
+        return SlidevResult(success=False, message="No active Slidev project. Please create or load one first.")
     
     date = datetime.datetime.now().strftime("%Y-%m-%d")
 
@@ -270,7 +272,7 @@ background: {background}
     SLIDEV_CONTENT[0] = template
     
     save_slidev_content()
-    return SlidevResult(True, "Cover page updated", 0)
+    return SlidevResult(success=True, message="Cover page updated", output=0)
 
 @mcp.tool()
 def add_page(content: str, layout: str = "default", parameters: dict = {}) -> SlidevResult:
@@ -283,7 +285,7 @@ def add_page(content: str, layout: str = "default", parameters: dict = {}) -> Sl
     global SLIDEV_CONTENT
     
     if not ACTIVE_SLIDEV_PROJECT:
-        return SlidevResult(False, "No active Slidev project. Please create or load one first.")
+        return SlidevResult(success=False, message="No active Slidev project. Please create or load one first.")
     
     parameters['layout'] = layout
     parameters['transition'] = 'slide-left'
@@ -302,7 +304,7 @@ def add_page(content: str, layout: str = "default", parameters: dict = {}) -> Sl
     page_index = len(SLIDEV_CONTENT) - 1
     save_slidev_content()
     
-    return SlidevResult(True, f"Page added at index {page_index}", page_index)
+    return SlidevResult(success=True, message=f"Page added at index {page_index}", output=page_index)
 
 
 @mcp.tool()
@@ -318,10 +320,10 @@ def set_page(index: int, content: str, layout: str = "", parameters: dict = {}) 
     global SLIDEV_CONTENT
     
     if not ACTIVE_SLIDEV_PROJECT:
-        return SlidevResult(False, "No active Slidev project. Please create or load one first.")
+        return SlidevResult(success=False, message="No active Slidev project. Please create or load one first.")
     
     if index < 0 or index >= len(SLIDEV_CONTENT):
-        return SlidevResult(False, f"Invalid page index: {index}")
+        return SlidevResult(success=False, message=f"Invalid page index: {index}")
     
     parameters['layout'] = layout
     parameters['transition'] = 'slide-left'
@@ -339,20 +341,28 @@ def set_page(index: int, content: str, layout: str = "", parameters: dict = {}) 
     SLIDEV_CONTENT[index] = template
     save_slidev_content()
     
-    return SlidevResult(True, f"Page {index} updated", index)
+    return SlidevResult(success=True, message=f"Page {index} updated", output=index)
 
 @mcp.tool()
 def get_page(index: int) -> SlidevResult:
     """get the content of the `index` th page"""
     if not ACTIVE_SLIDEV_PROJECT:
-        return SlidevResult(False, "No active Slidev project. Please create or load one first.")
+        return SlidevResult(success=False, message="No active Slidev project. Please create or load one first.")
     
     if index < 0 or index >= len(SLIDEV_CONTENT):
-        return SlidevResult(False, f"Invalid page index: {index}")
+        return SlidevResult(success=False, message=f"Invalid page index: {index}")
     
-    return SlidevResult(True, f"Content of page {index}", SLIDEV_CONTENT[index])
+    return SlidevResult(success=True, message=f"Content of page {index}", output=SLIDEV_CONTENT[index])
 
 
 
 if __name__ == "__main__":
-    mcp.run(transport='stdio')
+    parser = argparse.ArgumentParser(description='Slidev MCP Server')
+    parser.add_argument('--transport', 
+                       choices=['stdio', 'streamable-http'], 
+                       default='stdio',
+                       help='Transport method (default: stdio)')
+    
+    args = parser.parse_args()
+    
+    mcp.run(transport=args.transport)
