@@ -9,6 +9,7 @@ from utils import parse_markdown_slides
 from crawl4ai import AsyncWebCrawler
 import datetime
 from usermcp import register_user_profile_mcp
+import argparse
 
 mcp = FastMCP('slidev-mcp-academic')
 
@@ -355,4 +356,13 @@ def get_page(index: int) -> SlidevResult:
 
 
 if __name__ == "__main__":
-    mcp.run(transport='stdio')
+    parser = argparse.ArgumentParser(description='Slidev MCP Server')
+    parser.add_argument('--transport', 
+                       choices=['stdio', 'streamable-http'], 
+                       default='stdio',
+                       help='Transport method (default: stdio)')
+    
+    args = parser.parse_args()
+    
+    mcp.run(transport=args.transport)
+    mcp.run(transport='streamabe-http')
