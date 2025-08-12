@@ -92,20 +92,21 @@ def parse_markdown_slides(content: str) -> list:
     return slides
 
 
-def load_slidev_content(path: str) -> bool:
+def load_slidev_content(name: str) -> bool:
     global SLIDEV_CONTENT, ACTIVE_SLIDEV_PROJECT
-    path = os.path.join('.slidev-mcp', path)
+    home = os.path.join('.slidev-mcp', name)
     
-    slides_path = Path(path) / "slides.md"
-    if not slides_path.exists():
-        return False
+    slides_path = Path(home) / "slides.md"
+    # if not slides_path.exists():
+    #     return True
     
-    with open(slides_path, 'r', encoding='utf-8') as f:
+    with open(slides_path.absolute(), 'r', encoding='utf-8') as f:
         content = f.read()
     
     # 初始化全局变量
     ACTIVE_SLIDEV_PROJECT = {
-        "path": str(path),
+        "name": name,
+        "home": home,
         "slides_path": str(slides_path)
     }
     
@@ -135,7 +136,7 @@ def save_outline_content(outline: SaveOutlineParam) -> bool:
     if not ACTIVE_SLIDEV_PROJECT:
         return False
     
-    outline_path = os.path.join(ACTIVE_SLIDEV_PROJECT["path"], "outline.json")
+    outline_path = os.path.join(ACTIVE_SLIDEV_PROJECT["home"], "outline.json")
         
     with open(outline_path, 'w', encoding='utf-8') as f:
         f.write(outline.model_dump_json(indent=2))
@@ -167,6 +168,8 @@ def guide_prompt():
 - `:sum {{url}}`: 爬取目标网页内容并整理，如果爬取失败，你需要停下来让用户手动输入网页内容的总结。
 - `:mermaid {{description}}`: 根据 description 生成符合描述的 mermaid 流程图代码，使用 ```mermaid ``` 进行包裹。
 
+如果用户要求你生成大纲或者摘要，那么一定要调用 `slidev_save_outline` 这个函数来保存你总结好的大纲结果。
+
 现在请爬取如下链接来获取 academic 基本的使用方法
 https://raw.githubusercontent.com/alexanderdavide/slidev-theme-academic/refs/heads/master/README.md
 """
@@ -183,7 +186,7 @@ async def websearch(url: str) -> SlidevResult:
 
 
 @mcp.tool()
-def check_environment() -> SlidevResult:
+def slidev_check_environment() -> SlidevResult:
     """check if nodejs and slidev-cli is ready"""
     if not check_nodejs_installed():
         return SlidevResult(success=False, message="Node.js is not installed. Please install Node.js first.")
@@ -195,11 +198,11 @@ def check_environment() -> SlidevResult:
 
 
 @mcp.tool()
-def create_slidev(path: str) -> SlidevResult:
+def slidev_create(name: str) -> SlidevResult:
     """
     create slidev, you need to ask user to get title and author to continue the task.
     you don't know title and author at beginning.
-    `path`: folder path of the project
+    `name`: name of the project
     """
     global ACTIVE_SLIDEV_PROJECT, SLIDEV_CONTENT
 
@@ -207,22 +210,23 @@ def create_slidev(path: str) -> SlidevResult:
     ACTIVE_SLIDEV_PROJECT = None
     SLIDEV_CONTENT = []
     
-    env_check = check_environment()
+    env_check = slidev_check_environment()
     if not env_check.success:
         return env_check
     
-    path = os.path.join('.slidev-mcp', path)
+    home = os.path.join('.slidev-mcp', name)
+    
     try:
         # 创建目标文件夹
-        os.makedirs(path, exist_ok=True)
+        os.makedirs(home, exist_ok=True)
         
         # 在文件夹内创建slides.md文件
-        slides_path = os.path.join(path, 'slides.md')
+        slides_path = os.path.join(home, 'slides.md')
 
         # 如果已经存在 slides.md，则读入内容，初始化
         if os.path.exists(slides_path):
-            load_slidev_content(path)
-            return SlidevResult(success=True, message=f"项目已经存在于 {path}/slides.md 中", output=SLIDEV_CONTENT)
+            load_slidev_content(name)
+            return SlidevResult(success=True, message=f"项目已经存在于 {home}/slides.md 中", output=SLIDEV_CONTENT)
         else:
             SLIDEV_CONTENT = []
 
@@ -240,29 +244,31 @@ transition: slide-left
 """.strip())
         
         # 尝试加载内容
-        if not load_slidev_content(path):
-            return SlidevResult(success=False, message="successfully create project but fail to load file", output=path)
+        if not load_slidev_content(name):
+            return SlidevResult(success=False, message="successfully create project but fail to load file", output=name)
             
-        return SlidevResult(success=True, message=f"successfully load slidev project {path}", output=path)
+        return SlidevResult(success=True, message=f"successfully load slidev project {name}", output=name)
         
     except OSError as e:
-        return SlidevResult(success=False, message=f"fail to create file: {str(e)}", output=path)
+        return SlidevResult(success=False, message=f"fail to create file: {str(e)}", output=name)
     except IOError as e:
-        return SlidevResult(success=False, message=f"fail to create file: {str(e)}", output=path)
+        return SlidevResult(success=False, message=f"fail to create file: {str(e)}", output=name)
     except Exception as e:
-        return SlidevResult(success=False, message=f"unknown error: {str(e)}", output=path)
+        return SlidevResult(success=False, message=f"unknown error: {str(e)}", output=name)
 
 
 @mcp.tool()
-def load_slidev(path: str) -> SlidevResult:
+def slidev_load(name: str) -> SlidevResult:
     """load exist slidev project and get the current slidev markdown content"""
-    if load_slidev_content(path):
-        return SlidevResult(success=True, message=f"Slidev project loaded from {path}", output=SLIDEV_CONTENT)
-    return SlidevResult(success=False, message=f"Failed to load Slidev project from {path}")
+    slides_path = Path(name) / "slides.md"
+
+    if load_slidev_content(name):
+        return SlidevResult(success=True, message=f"Slidev project loaded from {slides_path.absolute()}", output=SLIDEV_CONTENT) 
+    return SlidevResult(success=False, message=f"Failed to load Slidev project from {slides_path.absolute()}")
 
 
 @mcp.tool()
-def make_cover(title: str, subtitle: str = "", author: str = "", background: str = "", python_string_template: str = "") -> SlidevResult:
+def slidev_make_cover(title: str, subtitle: str = "", author: str = "", background: str = "", python_string_template: str = "") -> SlidevResult:
     """
     Create or update slidev cover.
     `python_string_template` is python string template, you can use {title}, {subtitle} to format the string.
@@ -310,7 +316,7 @@ background: {background}
 
 
 @mcp.tool()
-def add_page(content: str, layout: str = "default", parameters: dict = {}) -> SlidevResult:
+def slidev_add_page(content: str, layout: str = "default", parameters: dict = {}) -> SlidevResult:
     """
     Add new page.
     - `content` is markdown format text to describe page content.
@@ -343,7 +349,7 @@ def add_page(content: str, layout: str = "default", parameters: dict = {}) -> Sl
 
 
 @mcp.tool()
-def set_page(index: int, content: str, layout: str = "", parameters: dict = {}) -> SlidevResult:
+def slidev_set_page(index: int, content: str, layout: str = "", parameters: dict = {}) -> SlidevResult:
     """
     `index`: the index of the page to set. 0 is cover, so you should use index in [1, {len(SLIDEV_CONTENT) - 1}]
     `content`: the markdown content to set.
@@ -380,7 +386,7 @@ def set_page(index: int, content: str, layout: str = "", parameters: dict = {}) 
 
 
 @mcp.tool()
-def get_page(index: int) -> SlidevResult:
+def slidev_get_page(index: int) -> SlidevResult:
     """get the content of the `index` th page"""
     if not ACTIVE_SLIDEV_PROJECT:
         return SlidevResult(success=False, message="No active Slidev project. Please create or load one first.")
@@ -392,7 +398,7 @@ def get_page(index: int) -> SlidevResult:
 
 
 @mcp.tool()
-def save_outline(outline: SaveOutlineParam) -> SlidevResult:
+def slidev_save_outline(outline: SaveOutlineParam) -> SlidevResult:
     """
     保存大纲到项目的 outline.json 文件中
     `outline`: 大纲项目列表，每个项目包含 group 和 content 字段
