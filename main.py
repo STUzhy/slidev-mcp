@@ -11,6 +11,7 @@ from crawl4ai import AsyncWebCrawler
 import datetime
 from usermcp import register_user_profile_mcp
 import argparse
+import json
 
 mcp = FastMCP('slidev-mcp-academic')
 
@@ -21,13 +22,23 @@ ACTIVE_SLIDEV_PROJECT: Optional[Dict] = None
 SLIDEV_CONTENT: List[str] = []
 ACADEMIC_THEME = 'academic'
 
+
 class SlidevResult(BaseModel):
     success: bool
     message: str
     output: Optional[Union[str, int, List[str]]] = None
 
+
+class OutlineItem(BaseModel):
+    group: str
+    content: str
+
+class SaveOutlineParam(BaseModel):
+    outlines: List[OutlineItem]
+
 def check_nodejs_installed() -> bool:
     return shutil.which("node") is not None
+
 
 def run_command(command: Union[str, List[str]]) -> SlidevResult:
     try:
@@ -46,6 +57,7 @@ def run_command(command: Union[str, List[str]]) -> SlidevResult:
             return SlidevResult(success=False, message=f"Command failed: {result.stderr}")
     except Exception as e:
         return SlidevResult(success=False, message=f"Error executing command: {str(e)}")
+
 
 def parse_markdown_slides(content: str) -> list:
     """
@@ -79,6 +91,7 @@ def parse_markdown_slides(content: str) -> list:
     
     return slides
 
+
 def load_slidev_content(path: str) -> bool:
     global SLIDEV_CONTENT, ACTIVE_SLIDEV_PROJECT
     path = os.path.join('.slidev-mcp', path)
@@ -100,6 +113,7 @@ def load_slidev_content(path: str) -> bool:
     SLIDEV_CONTENT = [slide.strip() for slide in slides if slide.strip()]
     return True
 
+
 def save_slidev_content() -> bool:
     global ACTIVE_SLIDEV_PROJECT, SLIDEV_CONTENT
     
@@ -111,12 +125,31 @@ def save_slidev_content() -> bool:
     
     return True
 
+
+def save_outline_content(outline: SaveOutlineParam) -> bool:
+    """
+    保存大纲到 outline.json 文件
+    """
+    global ACTIVE_SLIDEV_PROJECT
+    
+    if not ACTIVE_SLIDEV_PROJECT:
+        return False
+    
+    outline_path = os.path.join(ACTIVE_SLIDEV_PROJECT["path"], "outline.json")
+        
+    with open(outline_path, 'w', encoding='utf-8') as f:
+        f.write(outline.model_dump_json(indent=2))
+
+    return True
+
+
 def transform_parameters_to_frontmatter(parameters: dict):
     frontmatter = ''
     for key in parameters.keys():
         value = parameters.get(key, '')
         frontmatter += f'{key}: {value}\n'
     return frontmatter.strip()
+
 
 @mcp.prompt()
 def guide_prompt():
@@ -137,6 +170,7 @@ def guide_prompt():
 现在请爬取如下链接来获取 academic 基本的使用方法
 https://raw.githubusercontent.com/alexanderdavide/slidev-theme-academic/refs/heads/master/README.md
 """
+
 
 @mcp.tool(
     name='websearch',
@@ -164,7 +198,7 @@ def check_environment() -> SlidevResult:
 def create_slidev(path: str) -> SlidevResult:
     """
     create slidev, you need to ask user to get title and author to continue the task.
-    you don\'t know title and author at beginning.
+    you don't know title and author at beginning.
     `path`: folder path of the project
     """
     global ACTIVE_SLIDEV_PROJECT, SLIDEV_CONTENT
@@ -274,6 +308,7 @@ background: {background}
     save_slidev_content()
     return SlidevResult(success=True, message="Cover page updated", output=0)
 
+
 @mcp.tool()
 def add_page(content: str, layout: str = "default", parameters: dict = {}) -> SlidevResult:
     """
@@ -343,6 +378,7 @@ def set_page(index: int, content: str, layout: str = "", parameters: dict = {}) 
     
     return SlidevResult(success=True, message=f"Page {index} updated", output=index)
 
+
 @mcp.tool()
 def get_page(index: int) -> SlidevResult:
     """get the content of the `index` th page"""
@@ -354,6 +390,16 @@ def get_page(index: int) -> SlidevResult:
     
     return SlidevResult(success=True, message=f"Content of page {index}", output=SLIDEV_CONTENT[index])
 
+
+@mcp.tool()
+def save_outline(outline: SaveOutlineParam) -> SlidevResult:
+    """
+    保存大纲到项目的 outline.json 文件中
+    `outline`: 大纲项目列表，每个项目包含 group 和 content 字段
+    """
+    if save_outline_content(outline):
+        return SlidevResult(success=True, message="Outline saved successfully", output=None)
+    return SlidevResult(success=False, message="Failed to save outline. No active project.", output=None)
 
 
 if __name__ == "__main__":
