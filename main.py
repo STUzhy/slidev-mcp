@@ -155,7 +155,7 @@ def transform_parameters_to_frontmatter(parameters: dict):
 @mcp.prompt()
 def slidev_generate_prompt():
     """guide the ai to use slidev"""
-    return """
+    return f"""
 你是一个擅长使用 slidev 进行讲演生成的 agent，如果用户给你输入超链接，你需要调用 websearch 工具来获取对应的文本。对于返回的文本，如果你看到了验证码，网络异常等等代表访问失败的信息，你需要提醒用户本地网络访问受阻，请手动填入需要生成讲演的文本。
 当你生成讲演的每一页时，一定要严格按照用户输入的文本内容或者你通过 websearch 获取到的文本内容来。请记住，在获取用户输入之前，你一无所知，请不要自己编造不存在的事实，扭曲文章的原本含义，或者是不经过用户允许的情况下扩充本文的内容。
 请一定要尽可能使用爬取到的文章中的图片，它们往往是以 ![](https://adwadaaw.png) 的形式存在的。
@@ -170,14 +170,36 @@ def slidev_generate_prompt():
 
 如果用户要求你生成大纲或者摘要，那么一定要调用 `slidev_save_outline` 这个函数来保存你总结好的大纲结果。
 
-现在请爬取如下链接来获取 academic 基本的使用方法
+请爬取如下链接来获取 academic 基本的使用方法
 https://raw.githubusercontent.com/alexanderdavide/slidev-theme-academic/refs/heads/master/README.md
 """
 
 @mcp.prompt()
-def outline_generate_prompt():
+def slidev_generate_with_specific_outlines_prompt(title: str, content: str, outlines: str):
+    """generate slidev with specific outlines"""
+
+    return f"""
+{slidev_generate_prompt()}
+
+<OUTLINES> 标签中包裹的是整理好的大纲内容；<CONTENT> 标签中包裹的是用户输入的素材和内容。
+
+<OUTLINES>
+{outlines}
+</OUTLINES>
+
+<CONTENT title="{title}">
+{content}
+</CONTENT>
+
+请严格根据大纲中的内容调用工具来生成 slidev，outlines中的每一个元素，都对应一页 slidev 的页，你需要使用 `slidev_add_page` 来创建它。
+
+所有步骤结束后，你需要调用 `slidev_export_project` 来导出项目。
+"""
+
+@mcp.prompt()
+def outline_generate_prompt(title: str, content: str):
     """generate outline for slidev"""
-    return """
+    return f"""
 你是一个擅长使用 slidev 进行讲演生成的 agent，如果用户让你生成给定素材的大纲，从而在后续生成 slidev，那么你应该先根据用户输入的素材，生成一个大纲。
 生成大纲后，你需要调用 `slidev_save_outline` 来保存这次的结果。
 
@@ -189,9 +211,13 @@ def outline_generate_prompt():
 - `:sum {{url}}`: 使用 `websearch` 爬取目标网页内容并整理，如果爬取失败，你需要停下来让用户手动输入网页内容的总结。
 - `:mermaid {{description}}`: 根据 description 生成符合描述的 mermaid 流程图代码，使用 ```mermaid ``` 进行包裹。
 
----
-
 下面是用户的输入：
+
+<CONTENT title="{title}">
+{content}
+</CONTENT>
+
+请帮我制作 slidev ppt 的大纲。
     """
 
 
@@ -427,6 +453,9 @@ def slidev_save_outline(outline: SaveOutlineParam) -> SlidevResult:
         return SlidevResult(success=True, message="Outline saved successfully", output=None)
     return SlidevResult(success=False, message="Failed to save outline. No active project.", output=None)
 
+@mcp.tool()
+def slidev_export_project(path: str):
+    return ACTIVE_SLIDEV_PROJECT
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Slidev MCP Server')
