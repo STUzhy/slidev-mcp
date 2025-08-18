@@ -22,6 +22,30 @@ ACTIVE_SLIDEV_PROJECT: Optional[Dict] = None
 SLIDEV_CONTENT: List[str] = []
 ACADEMIC_THEME = 'academic'
 
+"""根目录配置说明
+SLIDEV_MCP_ROOT 环境变量：
+    * 若设置且为绝对路径 -> 使用该绝对路径作为所有项目的根目录
+    * 若未设置或不是绝对路径 -> 回退到默认相对目录 .slidev-mcp （相对于仓库根 / 运行目录）
+默认行为保持向后兼容。
+"""
+DEFAULT_SLIDEV_MCP_ROOT = '.slidev-mcp'
+_env_root = os.environ.get('SLIDEV_MCP_ROOT')
+if _env_root and os.path.isabs(_env_root):
+    SLIDEV_MCP_ROOT = _env_root
+else:
+    SLIDEV_MCP_ROOT = DEFAULT_SLIDEV_MCP_ROOT
+
+def ensure_root_dir():
+    try:
+        os.makedirs(SLIDEV_MCP_ROOT, exist_ok=True)
+    except Exception:
+        pass
+ensure_root_dir()
+
+def get_project_home(name: str) -> str:
+    """根据项目名称返回项目存储目录（相对路径）。"""
+    return os.path.join(SLIDEV_MCP_ROOT, name)
+
 
 class SlidevResult(BaseModel):
     success: bool
@@ -94,7 +118,7 @@ def parse_markdown_slides(content: str) -> list:
 
 def load_slidev_content(name: str) -> bool:
     global SLIDEV_CONTENT, ACTIVE_SLIDEV_PROJECT
-    home = os.path.join('.slidev-mcp', name)
+    home = get_project_home(name)
     
     slides_path = Path(home) / "slides.md"
     # if not slides_path.exists():
@@ -260,7 +284,7 @@ def slidev_create(name: str) -> SlidevResult:
     if not env_check.success:
         return env_check
     
-    home = os.path.join('.slidev-mcp', name)
+    home = get_project_home(name)
     
     try:
         # 创建目标文件夹
@@ -306,7 +330,8 @@ transition: slide-left
 @mcp.tool()
 def slidev_load(name: str) -> SlidevResult:
     """load exist slidev project and get the current slidev markdown content"""
-    slides_path = Path(name) / "slides.md"
+    # 兼容：传入的 name 视为项目名，而不是完整路径
+    slides_path = Path(get_project_home(name)) / "slides.md"
 
     if load_slidev_content(name):
         return SlidevResult(success=True, message=f"Slidev project loaded from {slides_path.absolute()}", output=SLIDEV_CONTENT) 

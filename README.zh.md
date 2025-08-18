@@ -33,6 +33,19 @@ slidev-mcp 是一个基于 [Slidev](https://github.com/slidevjs/slidev) 的智�
 
 详细的设置和使用说明，请查看[快速开始指南](docs/quickstart.zh.md)。
 
+### 环境变量
+
+可以通过设置环境变量 `SLIDEV_MCP_ROOT`（必须是绝对路径）来自定义生成的 Slidev 项目根目录；如果未设置，或设置的不是绝对路径，则回退为默认的 `.slidev-mcp`（相对当前工作目录）。
+
+示例（Windows cmd）：
+
+```
+set SLIDEV_MCP_ROOT=slides-output
+python main.py
+```
+
+之后项目会创建在该绝对路径目录下，而不是默认的 `.slidev-mcp/`。
+
 ## 🔧 可用工具
 
 MCP 服务器提供以下工具用于幻灯片创建和管理：

@@ -31,6 +31,19 @@ slidev-mcp is an intelligent slide generation tool based on [Slidev](https://git
 
 For detailed setup and usage instructions, please see [Quick Start Guide](docs/quickstart.md).
 
+### Environment Variable
+
+You can customize the root directory where generated Slidev projects are stored by setting the environment variable `SLIDEV_MCP_ROOT` (MUST be an absolute path). If not set (or set as a non-absolute path), the default relative directory `.slidev-mcp` (under current working directory) is used.
+
+Example (Windows cmd, PowerShell similar):
+
+Projects will then be created under that absolute path instead of `.slidev-mcp/`.
+set SLIDEV_MCP_ROOT=my-slides
+python main.py
+```
+
+Projects will then be created under `my-slides/` instead of `.slidev-mcp/`.
+
 ## 🔧 Available Tools
 
 The MCP server provides the following tools for slide creation and management:
