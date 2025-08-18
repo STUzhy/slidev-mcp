@@ -175,13 +175,13 @@ https://raw.githubusercontent.com/alexanderdavide/slidev-theme-academic/refs/hea
 """
 
 @mcp.prompt()
-def slidev_generate_with_specific_outlines_prompt(title: str, content: str, outlines: str):
+def slidev_generate_with_specific_outlines_prompt(title: str, content: str, outlines: str,path:str):
     """generate slidev with specific outlines"""
 
     return f"""
 {slidev_generate_prompt()}
 
-<OUTLINES> 标签中包裹的是整理好的大纲内容；<CONTENT> 标签中包裹的是用户输入的素材和内容。
+<OUTLINES> 标签中包裹的是整理好的大纲内容；<CONTENT> 标签中包裹的是用户输入的素材和内容,。在开始之前，你需要先使用slidev_create工具创建讲演，并以{path}作为参数传入。
 
 <OUTLINES>
 {outlines}
